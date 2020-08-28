@@ -18,7 +18,7 @@ from avod.core import orientation_encoder
 from avod.core.models.rpn_model import RpnModel
 
 
-class AvodModel(model.DetectionModel):
+class AvodModel(model.DetectionModel):  ## model.DetectionModel is an Abstract Base Class(ABC).
     ##############################
     # Keys for Predictions
     ##############################
@@ -78,17 +78,17 @@ class AvodModel(model.DetectionModel):
         """
 
         # Sets model configs (_config)
-        super(AvodModel, self).__init__(model_config)
+        super(AvodModel, self).__init__(model_config) ## Super Class is the immediate parent class. Sets the base class member variable.
 
         self.dataset = dataset
 
         # Dataset config
-        self._num_final_classes = self.dataset.num_classes + 1
+        self._num_final_classes = self.dataset.num_classes + 1 ## +1 because we consider the background as a class.
 
         # Input config
         input_config = self._config.input_config
         self._bev_pixel_size = np.asarray([input_config.bev_dims_h,
-                                           input_config.bev_dims_w])
+                                           input_config.bev_dims_w]) ## Takes the default value from model.proto
         self._bev_depth = input_config.bev_depth
 
         self._img_pixel_size = np.asarray([input_config.img_dims_h,
