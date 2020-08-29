@@ -98,9 +98,9 @@ class AvodModel(model.DetectionModel):  ## model.DetectionModel is an Abstract B
         # AVOD config
         avod_config = self._config.avod_config
         self._proposal_roi_crop_size = \
-            [avod_config.avod_proposal_roi_crop_size] * 2
-        self._positive_selection = avod_config.avod_positive_selection
-        self._nms_size = avod_config.avod_nms_size
+            [avod_config.avod_proposal_roi_crop_size] * 2 ## denotes the crop size in two dim - [value, value]
+        self._positive_selection = avod_config.avod_positive_selection ## to not consider bg as positive class
+        self._nms_size = avod_config.avod_nms_size ## from ablation studies, 100 is the number working well for pedestrians and cyclist classes
         self._nms_iou_threshold = avod_config.avod_nms_iou_thresh
         self._path_drop_probabilities = self._config.path_drop_probabilities
         self._box_rep = avod_config.avod_box_representation
