@@ -59,10 +59,10 @@ class BevVggPyr(bev_feature_extractor.BevFeatureExtractor):
 
                     # Encoder
                     conv1 = slim.repeat(padded,
-                                        vgg_config.vgg_conv1[0],
+                                        vgg_config.vgg_conv1[0], ## No. of repeatitions
                                         slim.conv2d,
-                                        vgg_config.vgg_conv1[1],
-                                        [3, 3],
+                                        vgg_config.vgg_conv1[1], ## No. of filters
+                                        [3, 3], ## Filter size
                                         normalizer_fn=slim.batch_norm,
                                         normalizer_params={
                                             'is_training': is_training},
