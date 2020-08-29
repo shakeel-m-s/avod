@@ -102,7 +102,7 @@ class RpnModel(model.DetectionModel):
         else:
             self._nms_size = rpn_config.rpn_test_nms_size
 
-        self._nms_iou_thresh = rpn_config.rpn_nms_iou_thresh
+        self._nms_iou_thresh = rpn_config.rpn_nms_iou_thresh ## Till here same as AVOD Model
 
         # Feature Extractor Nets
         self._bev_feature_extractor = \
