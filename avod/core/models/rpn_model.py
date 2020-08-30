@@ -126,12 +126,12 @@ class RpnModel(model.DetectionModel):
         self.dataset.train_val_test = self._train_val_test
         self._area_extents = self.dataset.kitti_utils.area_extents
         self._bev_extents = self.dataset.kitti_utils.bev_extents
-        self._cluster_sizes, _ = self.dataset.get_cluster_info()
-        self._anchor_strides = self.dataset.kitti_utils.anchor_strides
+        self._cluster_sizes, _ = self.dataset.get_cluster_info() ## performs k-means clustering and returns relevant details
+        self._anchor_strides = self.dataset.kitti_utils.anchor_strides ## how much we move the anchor boxes to generate all the anchors
         self._anchor_generator = \
             grid_anchor_3d_generator.GridAnchor3dGenerator()
 
-        self._path_drop_probabilities = self._config.path_drop_probabilities
+        self._path_drop_probabilities = self._config.path_drop_probabilities ## Thesis, 49 Pg
         self._train_on_all_samples = self._config.train_on_all_samples
         self._eval_all_samples = self._config.eval_all_samples
         # Overwrite the dataset's variable with the config
@@ -298,12 +298,16 @@ class RpnModel(model.DetectionModel):
 
                 random_values = tf.random_uniform(shape=[3],
                                                   minval=0.0,
-                                                  maxval=1.0)
+                                                  maxval=1.0) ## uniform dist with 3 samples in discrete space between 0 and 1. 
 
                 img_mask, bev_mask = self.create_path_drop_masks(
                     self._path_drop_probabilities[0],
                     self._path_drop_probabilities[1],
-                    random_values)
+                    random_values) ## We have to decide if we are taking image or BEV or both paths at the same time. We do flips to decide which of these we are going to take.
+                ## Each flip gives a value in the uniform distribution between [0,1].
+                ## If flip 1 value > 0.9, we drop Image
+                ## If flip 2 value > 0.9, we drop BEV
+                ## If both are dropped, we do flip 3, if flip 3 > 0.5, we take image else we take BEV.
 
                 img_proposal_input = tf.multiply(img_proposal_input,
                                                  img_mask)
